@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     optimizer = neat_optimizer.NEAT_optimizer()
     optimizer.initialize(3, 1, 150, "xor")
-    max_generations = 200
+    max_generations = 50
     #optimizer.draw_best()
     best_accuracys = []
     average_accuracys = []

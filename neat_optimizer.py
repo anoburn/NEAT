@@ -76,27 +76,28 @@ class NEAT_optimizer:
 
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-    genotype = genome_mod.Genome(3, 2)
-    genotype2 = genome_mod.Genome(3, 2, genotype.connections)
-    genotype.add_random_node()
-    genotype2.add_random_node()
-    for i in range(2):
+    #genotype = genome_mod.Genome(3, 2)
+    #genotype2 = genome_mod.Genome(3, 2, genotype.connections)
+    genotype2 = genome_mod.Genome(1, 2)
+    #genotype.add_random_node()
+    #genotype2.add_random_node()
+    #for i in range(2):
         #genotype.add_random_node()
-        genotype2.add_random_node()
+        #genotype2.add_random_node()
         #genotype2.random_connection()
         #print_edges(genotype2)
         #draw_genome_net(genotype2, show_innov=True, show_disabled=True, filename="genome2_run%i"%i)
 
     #genome_mod.draw_genome_net(genotype, show_weights=True, show_disabled=True, show_innov=False, filename="genome1")
-    #genome_mod.draw_genome_net(genotype2,show_weights=True, show_disabled=True, show_innov=False, filename="genome2")
+    genome_mod.draw_genome_net(genotype2,show_weights=True, show_disabled=True, show_innov=False, filename="genome2")
 
-    #funktion = genotype2.build_phenotype()
-    #print(funktion([1,1,1]))
-    pop = population.Population([genotype, genotype2])
-    print(len(pop.genomes))
+    funktion = genotype2.build_phenotype()
+    print(funktion([1]))
+    #pop = population.Population([genotype, genotype2])
+    #print(len(pop.genomes))
     #print(pop.all_species.values())
-    pop = pop.generate_offspring()
-    print(len(pop.genomes))
+    #pop = pop.generate_offspring()
+    #print(len(pop.genomes))
     #child = pop.create_child(genotype, genotype2)
 
     #genome_mod.print_edges(genotype)

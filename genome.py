@@ -139,13 +139,57 @@ class Genome:
             M_eff += M_iter[: self.n_out, self.n_out: self.n_in + self.n_out]
         return False
 
-    def build_phenotype_new(self):
-        """ Start of new method for building the phenotype """
-        sources = {}
-        for edge in self.connections:
-            sources[edge.node_out] = (edge.node_in, edge.weight)
-
     def build_phenotype(self):
+        """ Start of new method for building the phenotype """
+        sources = {node: [] for node in range(self.n)}
+        remaining = list(range(self.n))
+        functions = {}
+        for i, node in enumerate(self.inputs):
+            remaining.remove(node)
+            functions[node] = lambda x, index=i: x[index]
+        #for node in self.inputs:
+        #    x = [0, 1]
+        #    print("funktion test", functions[node](x))
+        for edge in self.connections:
+            if edge.enabled:
+                sources[edge.node_out].append((edge.node_in, edge.weight))
+        print("Sources: \n")
+        for key, value in sources.items():
+            print(key, value)
+        while len(remaining) != 0:
+            print("Remaining:", remaining)
+            remaining_new = [i for i in remaining]
+            for node in remaining:
+                print("Looking at node", node)
+                node_function = lambda x: 0
+                for source, weight in sources[node]:
+                    if source in remaining_new:
+                        break
+                    else:
+                        node_function = lambda x, old_function=node_function: old_function(x) + weight * functions[source](x)
+                else:   # no source of this node is remaining
+                    print("Finishing node ", node)
+                    '''
+                    def node_function(x):
+                        print("Node is", node)
+                        result = 0
+                        #result = node
+                        for source, weight in sources[node]:
+                            print("Adding previous value with weight", weight, " and value", functions[source](x))
+                            result += weight * functions[source](x)
+                        #result = np.arctan(result)
+                        return result'''
+
+                    #node_function = lambda x: np.arctan(node_function(x))   # activation function
+                    functions[node] = node_function
+                    remaining_new.remove(node)
+            remaining = remaining_new
+        print("Went through loop")
+        #print(functions)
+        phenotype = lambda x: np.array([functions[node](x) for node in self.outputs])
+        return phenotype
+
+    def build_phenotype_old(self):
         M = np.zeros((self.n, self.n))
         for connection in self.connections:
             if connection.enabled:
