@@ -261,3 +261,7 @@ class Population:
     def build_phenotypes(self):
         self.phenotypes = [genome.build_phenotype() for genome in self.genomes]
         return self.phenotypes
+
+    def species_sizes(self):
+        sizes = [len(species) for core, species in self.all_species.items()]
+        return sizes

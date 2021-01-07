@@ -73,6 +73,9 @@ class NEAT_optimizer:
         logger.info("Generation {}: {} species".format(self.generation, len(self.population.all_species)))
         logger.info("    Best score: {}".format(self.get_best().score))
 
+    def species_sizes(self):
+        return self.population.species_sizes()
+
 
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)

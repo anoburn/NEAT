@@ -40,13 +40,14 @@ if __name__ == '__main__':
     best_accuracys = []
     average_accuracys = []
     generations = []
+    species_sizes = []
     plt.show()
-    axes = plt.gca()
-    axes.set_xlim(0, max_generations)
-    axes.set_ylim(0, 1)
-    axes.axhline(0.5)
-    line1, = axes.plot(generations, best_accuracys, 'r-')
-    line2, = axes.plot(generations, average_accuracys, 'b-')
+    f, (ax1, ax2) = plt.subplots(2, 1)
+    ax1.set_xlim(0, max_generations)
+    ax1.set_ylim(0, 1)
+    ax1.axhline(0.5)
+    line1, = ax1.plot(generations, best_accuracys, 'r-')
+    line2, = ax1.plot(generations, average_accuracys, 'b-')
 
     for j in range(max_generations):
         #print("Starting generation {}".format(j))
@@ -73,10 +74,20 @@ if __name__ == '__main__':
         best_accuracys.append(max(accuracys))
         average_accuracys.append(sum(accuracys)/len(accuracys))
         generations.append(j)
+        species_sizes.append(optimizer.species_sizes())
+        max_n_species = max([len(sizes) for sizes in species_sizes])
+        species_sizes_padded = np.zeros((max_n_species, j + 1))
+        for i, gen_sizes in enumerate(species_sizes):
+            for k, size in enumerate(gen_sizes):
+                species_sizes_padded[k, i] = size
         line1.set_xdata(generations)
         line1.set_ydata(best_accuracys)
         line2.set_xdata(generations)
         line2.set_ydata(average_accuracys)
+
+        ax2.clear()
+        ax2.stackplot(np.array(generations), species_sizes_padded)
+        ax2.set_xlim(0, max_generations)
         plt.draw()
         plt.pause(1e-17)
 
