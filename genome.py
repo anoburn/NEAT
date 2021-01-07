@@ -56,7 +56,8 @@ class Genome:
         self.connections.append(connection)
 
     def random_connection(self, amplitude=1.):
-        if len(self.connections) == self.n ** 2:
+        n_max = sum(i for i in range(1, self.n+1)) - sum(i for i in range(1, self.n_in+1)) - sum(i for i in range(1, self.n_out+1))
+        if len(self.connections) == n_max:
             print("Already all connections")
             return
 
@@ -92,7 +93,7 @@ class Genome:
 
         for node in self.hidden:
             for elder in get_elders(node):
-                if elder not in self.inputs:
+                if elder not in self.inputs:    # TODO: remove this condition?
                     #logger.info('{}, {}'.format(node, elder))
                     available_connections.remove([node, elder])
 
@@ -238,6 +239,7 @@ def print_edges(genome):
 if __name__ == "__main__":
     genotype = Genome(3, 1)
     genotype2 = deepcopy(genotype)
+    genotype.random_connection()
     draw_genome_net(genotype, show_disabled=True, filename="initial")
     print(genotype.has_cycle())
     #genotype.add_connection(2, 4)
