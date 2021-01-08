@@ -58,7 +58,7 @@ class Genome:
     def random_connection(self, amplitude=1.):
         n_max = sum(i for i in range(1, self.n+1)) - sum(i for i in range(1, self.n_in+1)) - sum(i for i in range(1, self.n_out+1))
         if len(self.connections) == n_max:
-            print("Already all connections")
+            # print("Already all connections")
             return
 
         #print_edges(self)
@@ -73,7 +73,7 @@ class Genome:
         #print("Random connection: outputs:", outputs)
         v_in, v_out = np.meshgrid(inputs, outputs)
         available_connections = list(np.stack((v_in.flatten(), v_out.flatten()), axis=1).tolist())
-        #print("Available connections (initial): ", available_connections)
+        # print("Available connections (initial): ", available_connections)
 
         elders = {i: set() for i in self.outputs + self.hidden + self.inputs}   # save all nodes from which a node receives (inherited) signal to avoid loops
         for edge in self.connections:

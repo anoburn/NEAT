@@ -13,9 +13,9 @@ class NEAT_optimizer:
         self.population = None
         self.parental_population = None
 
-    def initialize(self, n_in, n_out, pop_size=100, folder=None, delta_t=1., c1=1., c2=1., c3=0.5, desired_species=10,
-                   min_species=2, p_weight_mut=0.7, p_weight_random=0.02, weight_mut_sigma=0.3, node_mut_rate=0.01,
-                   edge_mut_rate=0.05, p_child_clone=0.25, p_mutate=0.8, p_inter_species=0.02, weight_amplitude=1.):
+    def initialize(self, n_in, n_out, pop_size=100, folder=None, delta_t=1., c1=1., c2=1., c3=0.5, desired_species=1,
+                   min_species=1, p_weight_mut=0.4, p_weight_random=0.02, weight_mut_sigma=0.3, node_mut_rate=0.05,
+                   edge_mut_rate=0.05, p_child_clone=0.02, p_mutate=0.8, p_inter_species=0.02, weight_amplitude=1.):
         self.generation = 1
         self.n_in = n_in
         self.n_out = n_out
@@ -90,15 +90,20 @@ if __name__ == '__main__':
         #print_edges(genotype2)
         #draw_genome_net(genotype2, show_innov=True, show_disabled=True, filename="genome2_run%i"%i)
 
-    #genome_mod.draw_genome_net(genotype, show_weights=True, show_disabled=True, show_innov=False, filename="genome1")
-    #genome_mod.draw_genome_net(genotype2,show_weights=True, show_disabled=True, show_innov=False, filename="genome2")
+    # genome_mod.draw_genome_net(genotype, show_weights=True, show_disabled=True, show_innov=False, filename="genome1")
+    # genome_mod.draw_genome_net(genotype2,show_weights=True, show_disabled=True, show_innov=False, filename="genome2")
 
     #funktion = genotype2.build_phenotype()
     #print(funktion([1,1,1]))
     pop = population.Population([genotype, genotype2])
+    for i, genome in enumerate(pop.genomes):
+        genome_mod.draw_genome_net(genome, show_weights=True, show_disabled=True, show_innov=False, filename=f'initial {i}')
     print(len(pop.genomes))
     #print(pop.all_species.values())
+
     pop = pop.generate_offspring()
+    for i, genome in enumerate(pop.genomes):
+        genome_mod.draw_genome_net(genome, show_weights=True, show_disabled=True, show_innov=False, filename=f'new {i}')
     print(len(pop.genomes))
     #child = pop.create_child(genotype, genotype2)
 

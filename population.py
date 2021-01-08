@@ -159,11 +159,11 @@ class Population:
                 else:
                     edge.weight += random.gauss(0, self.weight_mut_sigma)
         prob = random.random()
-        if prob <= self.node_mut_rate:
+        if prob < self.node_mut_rate:
             #logger.debug("Adding node!")
             genome.add_random_node(self.weight_amplitude)
         prob = random.random()
-        if prob <= self.edge_mut_rate:
+        if prob < self.edge_mut_rate:
             #logger.debug("Adding connection!")
             genome.random_connection(self.weight_amplitude)
         #no_cycle = not genome_copy.has_cycle()
@@ -213,10 +213,18 @@ class Population:
             #print([instance.score for instance in species_sorted[key]])
             reproducers = species_sorted[key][: int(round((len(species_sorted[key]) * 0.9)))]    # remove worst 10%
             #print([instance.score for instance in reproducers])
-            p = np.array([2 * gaussian(i, 0, len(reproducers)/4) for i in range(len(reproducers))])
+            # p = np.array([2 * gaussian(i, 0, len(reproducers)/8) for i in range(len(reproducers))])
+            p = np.array([len(reproducers) - i for i in range(len(reproducers))])
             p = p / sum(p)  # normalize so probs sum up to 1
             #print(len(species_sorted[key]), int(round((len(species_sorted[key]) * 0.9))))
-            for i in range(n_offspring):
+
+            # copy best genomes of species
+            n_copies = 2
+            for i in range(n_copies):
+                if i < len(reproducers):
+                    children.append(reproducers[i].copy())
+
+            for i in range(n_offspring-n_copies):
                 prob = random.random()
                 parent1 = np.random.choice(reproducers, p=p)
                 if prob < self.p_child_clone:
